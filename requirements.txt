@@ -1,0 +1,11 @@
+# Steam Swapper - Development / Build Dependencies
+#
+# Runtime:
+# The application itself uses only Python's standard library.
+#
+# Build:
+# PyInstaller creates the standalone Windows executable.
+# Pillow is used by PyInstaller when processing/converting application icons.
+
+pyinstaller>=6.0,<7.0
+pillow>=10.0
