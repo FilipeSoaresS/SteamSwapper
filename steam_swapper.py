@@ -25,11 +25,6 @@ DATA_FILENAME = "steam_contas.txt"
 # ============================================================
 
 def application_directory() -> Path:
-    """
-    Returns the folder containing the .py file
-    or the compiled .exe.
-    """
-
     if getattr(sys, "frozen", False):
         return Path(sys.executable).resolve().parent
 
@@ -37,16 +32,6 @@ def application_directory() -> Path:
 
 
 def resource_directory() -> Path:
-    """
-    Returns the directory containing bundled resources.
-
-    Normal Python:
-        Project folder
-
-    PyInstaller:
-        sys._MEIPASS temporary directory
-    """
-
     if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
         return Path(sys._MEIPASS)
 
@@ -60,14 +45,10 @@ DATA_FILE = APP_DIR / DATA_FILENAME
 
 IMG_DIR = RESOURCE_DIR / "img"
 
-# ============================================================
-# IMAGES
-# ============================================================
-
-# Image displayed above "STEAM SWAPPER"
+# Logo shown inside the application
 LOGO_FILE = IMG_DIR / "2.png"
 
-# Native Windows icon for title bar / executable
+# Windows title bar / EXE icon
 ICON_FILE = IMG_DIR / "2.ico"
 
 
@@ -76,8 +57,9 @@ ICON_FILE = IMG_DIR / "2.ico"
 # ============================================================
 
 BG = "#0b0d10"
-PANEL = "#13171c"
-PANEL_ALT = "#1b2027"
+
+PANEL = "#12171d"
+PANEL_ALT = "#1a2027"
 
 TEXT = "#f4f4f4"
 MUTED = "#8b949e"
@@ -87,7 +69,12 @@ BLUE_DARK = "#0875ff"
 ORANGE = "#ff9418"
 ORANGE_HOVER = "#ffad47"
 
-BORDER = "#2a3038"
+BORDER = "#242a31"
+
+# Custom scrollbar
+SCROLL_TRACK = "#090b0e"
+SCROLL_THUMB = "#252b32"
+SCROLL_THUMB_HOVER = "#353d46"
 
 
 # ============================================================
@@ -95,9 +82,6 @@ BORDER = "#2a3038"
 # ============================================================
 
 def enable_dark_title_bar(window):
-    """
-    Enables the native Windows dark title bar.
-    """
 
     if os.name != "nt":
         return
@@ -132,14 +116,357 @@ def enable_dark_title_bar(window):
 
 
 # ============================================================
+# CUSTOM DARK ROUNDED SCROLLBAR
+# ============================================================
+
+class RoundedScrollbar(tk.Canvas):
+
+    def __init__(
+        self,
+        parent,
+        command=None,
+        width=14,
+        bg=SCROLL_TRACK,
+        thumb_color=SCROLL_THUMB,
+        hover_color=SCROLL_THUMB_HOVER,
+        **kwargs,
+    ):
+
+        super().__init__(
+            parent,
+            width=width,
+            bg=bg,
+            highlightthickness=0,
+            bd=0,
+            relief="flat",
+            **kwargs,
+        )
+
+        self.command = command
+
+        self.thumb_color = thumb_color
+        self.hover_color = hover_color
+
+        self.first = 0.0
+        self.last = 1.0
+
+        self.dragging = False
+        self.drag_offset = 0
+
+        self.thumb_id = None
+
+        self.bind(
+            "<Configure>",
+            self._redraw
+        )
+
+        self.bind(
+            "<Button-1>",
+            self._mouse_down
+        )
+
+        self.bind(
+            "<B1-Motion>",
+            self._mouse_drag
+        )
+
+        self.bind(
+            "<ButtonRelease-1>",
+            self._mouse_up
+        )
+
+        self.bind(
+            "<Enter>",
+            self._hover_on
+        )
+
+        self.bind(
+            "<Leave>",
+            self._hover_off
+        )
+
+
+    # --------------------------------------------------------
+    # TREEVIEW CALLBACK
+    # --------------------------------------------------------
+
+    def set(self, first, last):
+
+        self.first = float(first)
+        self.last = float(last)
+
+        self._redraw()
+
+
+    # --------------------------------------------------------
+    # DRAW ROUNDED RECTANGLE
+    # --------------------------------------------------------
+
+    def _rounded_rectangle(
+        self,
+        x1,
+        y1,
+        x2,
+        y2,
+        radius,
+        **kwargs,
+    ):
+
+        radius = min(
+            radius,
+            (x2 - x1) / 2,
+            (y2 - y1) / 2,
+        )
+
+        points = [
+            x1 + radius, y1,
+            x2 - radius, y1,
+
+            x2, y1,
+            x2, y1 + radius,
+
+            x2, y2 - radius,
+            x2, y2,
+
+            x2 - radius, y2,
+            x1 + radius, y2,
+
+            x1, y2,
+            x1, y2 - radius,
+
+            x1, y1 + radius,
+            x1, y1,
+        ]
+
+        return self.create_polygon(
+            points,
+            smooth=True,
+            splinesteps=36,
+            **kwargs,
+        )
+
+
+    # --------------------------------------------------------
+    # REDRAW
+    # --------------------------------------------------------
+
+    def _redraw(self, event=None):
+
+        self.delete("thumb")
+
+        height = self.winfo_height()
+        width = self.winfo_width()
+
+        if height <= 1:
+            return
+
+        # If all content is visible, keep the scrollbar minimal
+        if self.first <= 0 and self.last >= 1:
+            return
+
+        top = self.first * height
+        bottom = self.last * height
+
+        minimum_thumb = 34
+
+        if bottom - top < minimum_thumb:
+            center = (top + bottom) / 2
+            top = center - minimum_thumb / 2
+            bottom = center + minimum_thumb / 2
+
+        if top < 3:
+            top = 3
+
+        if bottom > height - 3:
+            bottom = height - 3
+
+        x1 = 3
+        x2 = width - 3
+
+        self.thumb_id = self._rounded_rectangle(
+            x1,
+            top,
+            x2,
+            bottom,
+            radius=(x2 - x1) / 2,
+            fill=self.thumb_color,
+            outline="",
+            tags="thumb",
+        )
+
+
+    # --------------------------------------------------------
+    # HIT TEST
+    # --------------------------------------------------------
+
+    def _thumb_bounds(self):
+
+        height = self.winfo_height()
+
+        top = self.first * height
+        bottom = self.last * height
+
+        minimum_thumb = 34
+
+        if bottom - top < minimum_thumb:
+
+            center = (
+                top + bottom
+            ) / 2
+
+            top = (
+                center
+                - minimum_thumb / 2
+            )
+
+            bottom = (
+                center
+                + minimum_thumb / 2
+            )
+
+        top = max(3, top)
+
+        bottom = min(
+            height - 3,
+            bottom
+        )
+
+        return top, bottom
+
+
+    # --------------------------------------------------------
+    # MOUSE DOWN
+    # --------------------------------------------------------
+
+    def _mouse_down(self, event):
+
+        top, bottom = (
+            self._thumb_bounds()
+        )
+
+        if top <= event.y <= bottom:
+
+            self.dragging = True
+
+            self.drag_offset = (
+                event.y - top
+            )
+
+        else:
+
+            if not self.command:
+                return
+
+            if event.y < top:
+
+                self.command(
+                    "scroll",
+                    -1,
+                    "pages",
+                )
+
+            else:
+
+                self.command(
+                    "scroll",
+                    1,
+                    "pages",
+                )
+
+
+    # --------------------------------------------------------
+    # DRAG
+    # --------------------------------------------------------
+
+    def _mouse_drag(self, event):
+
+        if not self.dragging:
+            return
+
+        if not self.command:
+            return
+
+        height = self.winfo_height()
+
+        top, bottom = (
+            self._thumb_bounds()
+        )
+
+        thumb_height = (
+            bottom - top
+        )
+
+        usable = (
+            height
+            - thumb_height
+            - 6
+        )
+
+        if usable <= 0:
+            return
+
+        new_top = (
+            event.y
+            - self.drag_offset
+            - 3
+        )
+
+        fraction = (
+            new_top / usable
+        )
+
+        fraction = max(
+            0.0,
+            min(
+                1.0,
+                fraction,
+            ),
+        )
+
+        self.command(
+            "moveto",
+            fraction,
+        )
+
+
+    # --------------------------------------------------------
+    # MOUSE UP
+    # --------------------------------------------------------
+
+    def _mouse_up(self, event):
+
+        self.dragging = False
+
+
+    # --------------------------------------------------------
+    # HOVER
+    # --------------------------------------------------------
+
+    def _hover_on(self, event):
+
+        if self.thumb_id:
+
+            self.itemconfigure(
+                "thumb",
+                fill=self.hover_color,
+            )
+
+
+    def _hover_off(self, event):
+
+        if self.thumb_id:
+
+            self.itemconfigure(
+                "thumb",
+                fill=self.thumb_color,
+            )
+
+
+# ============================================================
 # STEAM DETECTION
 # ============================================================
 
 def find_steam_executable() -> Path | None:
-    """
-    Finds Steam using the Windows Registry
-    and common installation folders.
-    """
 
     if os.name != "nt":
         return None
@@ -148,21 +475,25 @@ def find_steam_executable() -> Path | None:
         import winreg
 
         registry_locations = [
+
             (
                 winreg.HKEY_CURRENT_USER,
                 r"Software\Valve\Steam",
                 "SteamExe",
             ),
+
             (
                 winreg.HKEY_CURRENT_USER,
                 r"Software\Valve\Steam",
                 "SteamPath",
             ),
+
             (
                 winreg.HKEY_LOCAL_MACHINE,
                 r"SOFTWARE\WOW6432Node\Valve\Steam",
                 "InstallPath",
             ),
+
             (
                 winreg.HKEY_LOCAL_MACHINE,
                 r"SOFTWARE\Valve\Steam",
@@ -173,6 +504,7 @@ def find_steam_executable() -> Path | None:
         for hive, key_path, value_name in registry_locations:
 
             try:
+
                 with winreg.OpenKey(
                     hive,
                     key_path,
@@ -184,22 +516,37 @@ def find_steam_executable() -> Path | None:
                     )
 
                     candidate = Path(
-                        str(value).replace("/", "\\")
+                        str(value).replace(
+                            "/",
+                            "\\",
+                        )
                     )
 
                     if candidate.is_dir():
-                        candidate = candidate / "steam.exe"
+
+                        candidate = (
+                            candidate
+                            / "steam.exe"
+                        )
 
                     if candidate.is_file():
+
                         return candidate
 
-            except (FileNotFoundError, OSError):
+            except (
+                FileNotFoundError,
+                OSError,
+            ):
+
                 pass
 
     except Exception:
+
         pass
 
+
     candidates = [
+
         Path(
             os.environ.get(
                 "ProgramFiles(x86)",
@@ -218,13 +565,18 @@ def find_steam_executable() -> Path | None:
         / "Steam"
         / "steam.exe",
 
-        Path(r"C:\Steam\steam.exe"),
+        Path(
+            r"C:\Steam\steam.exe"
+        ),
     ]
+
 
     for candidate in candidates:
 
         if candidate.is_file():
+
             return candidate
+
 
     return None
 
@@ -233,29 +585,59 @@ def find_steam_executable() -> Path | None:
 # VALIDATION
 # ============================================================
 
-def validate_login(login: str) -> tuple[bool, str]:
+def validate_login(
+    login: str,
+) -> tuple[bool, str]:
 
     login = login.strip()
 
+
     if not login:
-        return False, "Steam login cannot be empty."
+
+        return (
+            False,
+            "Steam login cannot be empty.",
+        )
+
 
     if "|" in login:
-        return False, 'The "|" character cannot be used in the login.'
+
+        return (
+            False,
+            'The "|" character cannot be used in the login.',
+        )
+
 
     if "\n" in login or "\r" in login:
-        return False, "The Steam login contains invalid characters."
+
+        return (
+            False,
+            "The Steam login contains invalid characters.",
+        )
+
 
     return True, ""
 
 
-def validate_note(note: str) -> tuple[bool, str]:
+def validate_note(
+    note: str,
+) -> tuple[bool, str]:
 
     if "|" in note:
-        return False, 'The "|" character cannot be used in the note.'
+
+        return (
+            False,
+            'The "|" character cannot be used in the note.',
+        )
+
 
     if "\n" in note or "\r" in note:
-        return False, "The note contains invalid characters."
+
+        return (
+            False,
+            "The note contains invalid characters.",
+        )
+
 
     return True, ""
 
@@ -266,11 +648,19 @@ def validate_note(note: str) -> tuple[bool, str]:
 
 class AccountStore:
 
-    def __init__(self, path: Path):
+    def __init__(
+        self,
+        path: Path,
+    ):
 
         self.path = path
+
         self.ensure_exists()
 
+
+    # --------------------------------------------------------
+    # CREATE
+    # --------------------------------------------------------
 
     def ensure_exists(self):
 
@@ -294,18 +684,25 @@ class AccountStore:
             ) from exc
 
 
+    # --------------------------------------------------------
+    # LOAD
+    # --------------------------------------------------------
+
     def load(self) -> list[dict]:
 
         accounts = []
 
+
         try:
 
             try:
+
                 text = self.path.read_text(
                     encoding="utf-8-sig"
                 )
 
             except UnicodeDecodeError:
+
                 text = self.path.read_text(
                     encoding="cp1252"
                 )
@@ -323,7 +720,9 @@ class AccountStore:
 
             line = line.strip()
 
+
             if not line:
+
                 continue
 
 
@@ -334,31 +733,50 @@ class AccountStore:
 
 
             if len(parts) < 2:
+
                 continue
 
 
-            number_text = parts[0].strip()
-            login = parts[1].strip()
+            number_text = (
+                parts[0].strip()
+            )
+
+            login = (
+                parts[1].strip()
+            )
+
 
             note = (
+
                 parts[2].strip()
+
                 if len(parts) >= 3
+
                 else "No note"
             )
 
 
             try:
-                number = int(number_text)
+
+                number = int(
+                    number_text
+                )
 
             except ValueError:
+
                 continue
 
 
-            if number < 0 or number > 100:
+            if (
+                number < 0
+                or number > 100
+            ):
+
                 continue
 
 
             if not login:
+
                 continue
 
 
@@ -366,15 +784,22 @@ class AccountStore:
                 {
                     "number": number,
                     "login": login,
-                    "note": note or "No note",
+                    "note": (
+                        note
+                        or "No note"
+                    ),
                 }
             )
 
 
         unique = {}
 
+
         for account in accounts:
-            unique[account["number"]] = account
+
+            unique[
+                account["number"]
+            ] = account
 
 
         accounts = list(
@@ -383,18 +808,27 @@ class AccountStore:
 
 
         accounts.sort(
-            key=lambda account: account["number"]
+            key=lambda account:
+            account["number"]
         )
 
 
         return accounts
 
 
-    def save(self, accounts: list[dict]):
+    # --------------------------------------------------------
+    # SAVE
+    # --------------------------------------------------------
+
+    def save(
+        self,
+        accounts: list[dict],
+    ):
 
         accounts = sorted(
             accounts,
-            key=lambda account: account["number"],
+            key=lambda account:
+            account["number"],
         )
 
 
@@ -424,14 +858,20 @@ class AccountStore:
             )
 
 
-        content = "\n".join(lines)
+        content = "\n".join(
+            lines
+        )
+
 
         if content:
+
             content += "\n"
 
 
-        temp_file = self.path.with_suffix(
-            ".tmp"
+        temp_file = (
+            self.path.with_suffix(
+                ".tmp"
+            )
         )
 
 
@@ -451,9 +891,11 @@ class AccountStore:
             try:
 
                 if temp_file.exists():
+
                     temp_file.unlink()
 
             except OSError:
+
                 pass
 
 
@@ -463,6 +905,10 @@ class AccountStore:
                 f"{exc}"
             ) from exc
 
+
+    # --------------------------------------------------------
+    # ADD
+    # --------------------------------------------------------
 
     def add(
         self,
@@ -476,7 +922,10 @@ class AccountStore:
 
         for account in accounts:
 
-            if account["number"] == number:
+            if (
+                account["number"]
+                == number
+            ):
 
                 raise ValueError(
                     f"Number {number} is already being used."
@@ -497,35 +946,60 @@ class AccountStore:
             {
                 "number": number,
                 "login": login.strip(),
-                "note": note.strip() or "No note",
+                "note": (
+                    note.strip()
+                    or "No note"
+                ),
             }
         )
 
 
-        self.save(accounts)
+        self.save(
+            accounts
+        )
 
 
-    def remove(self, number: int):
+    # --------------------------------------------------------
+    # REMOVE
+    # --------------------------------------------------------
+
+    def remove(
+        self,
+        number: int,
+    ):
 
         accounts = self.load()
 
 
         filtered = [
+
             account
+
             for account in accounts
-            if account["number"] != number
+
+            if account["number"]
+            != number
         ]
 
 
-        if len(filtered) == len(accounts):
+        if (
+            len(filtered)
+            == len(accounts)
+        ):
 
             raise ValueError(
                 f"Account number {number} was not found."
             )
 
 
-        self.save(filtered)
+        self.save(
+            filtered
+        )
 
+
+    # --------------------------------------------------------
+    # UPDATE
+    # --------------------------------------------------------
 
     def update(
         self,
@@ -542,9 +1016,13 @@ class AccountStore:
 
         for account in accounts:
 
-            if account["number"] == old_number:
+            if (
+                account["number"]
+                == old_number
+            ):
 
                 target = account
+
                 break
 
 
@@ -558,8 +1036,11 @@ class AccountStore:
         for account in accounts:
 
             if (
-                account["number"] == new_number
-                and old_number != new_number
+                account["number"]
+                == new_number
+                and
+                old_number
+                != new_number
             ):
 
                 raise ValueError(
@@ -568,8 +1049,10 @@ class AccountStore:
 
 
             if (
-                account["number"] != old_number
-                and account["login"].lower()
+                account["number"]
+                != old_number
+                and
+                account["login"].lower()
                 == login.lower()
             ):
 
@@ -578,8 +1061,13 @@ class AccountStore:
                 )
 
 
-        target["number"] = new_number
-        target["login"] = login.strip()
+        target["number"] = (
+            new_number
+        )
+
+        target["login"] = (
+            login.strip()
+        )
 
         target["note"] = (
             note.strip()
@@ -587,7 +1075,9 @@ class AccountStore:
         )
 
 
-        self.save(accounts)
+        self.save(
+            accounts
+        )
 
 
 # ============================================================
@@ -597,6 +1087,7 @@ class AccountStore:
 def steam_process_running() -> bool:
 
     if os.name != "nt":
+
         return False
 
 
@@ -610,7 +1101,9 @@ def steam_process_running() -> bool:
             ],
             capture_output=True,
             text=True,
-            creationflags=subprocess.CREATE_NO_WINDOW,
+            creationflags=(
+                subprocess.CREATE_NO_WINDOW
+            ),
             check=False,
         )
 
@@ -622,6 +1115,7 @@ def steam_process_running() -> bool:
 
 
     except OSError:
+
         return False
 
 
@@ -634,11 +1128,18 @@ def close_steam(
 ) -> bool:
 
     if os.name != "nt":
+
         return False
 
 
-    no_window = subprocess.CREATE_NO_WINDOW
+    no_window = (
+        subprocess.CREATE_NO_WINDOW
+    )
 
+
+    # --------------------------------------------------------
+    # Graceful shutdown
+    # --------------------------------------------------------
 
     try:
 
@@ -647,22 +1148,38 @@ def close_steam(
                 str(steam_exe),
                 "-shutdown",
             ],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stdout=(
+                subprocess.DEVNULL
+            ),
+            stderr=(
+                subprocess.DEVNULL
+            ),
             creationflags=no_window,
         )
 
     except OSError:
+
         pass
 
+
+    # --------------------------------------------------------
+    # Wait
+    # --------------------------------------------------------
 
     for _ in range(16):
 
         if not steam_process_running():
+
             return True
 
-        time.sleep(0.5)
+        time.sleep(
+            0.5
+        )
 
+
+    # --------------------------------------------------------
+    # Force close
+    # --------------------------------------------------------
 
     processes = [
         "steam.exe",
@@ -682,19 +1199,29 @@ def close_steam(
                     "/IM",
                     process,
                 ],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
+                stdout=(
+                    subprocess.DEVNULL
+                ),
+                stderr=(
+                    subprocess.DEVNULL
+                ),
                 creationflags=no_window,
                 check=False,
             )
 
         except OSError:
+
             pass
 
 
-    time.sleep(1.5)
+    time.sleep(
+        1.5
+    )
 
-    return not steam_process_running()
+
+    return (
+        not steam_process_running()
+    )
 
 
 # ============================================================
@@ -715,8 +1242,12 @@ def launch_steam(
         cwd=str(
             steam_exe.parent
         ),
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        stdout=(
+            subprocess.DEVNULL
+        ),
+        stderr=(
+            subprocess.DEVNULL
+        ),
     )
 
 
@@ -724,7 +1255,9 @@ def launch_steam(
 # ACCOUNT DIALOG
 # ============================================================
 
-class AccountDialog(tk.Toplevel):
+class AccountDialog(
+    tk.Toplevel
+):
 
     def __init__(
         self,
@@ -733,29 +1266,41 @@ class AccountDialog(tk.Toplevel):
         existing=None,
     ):
 
-        super().__init__(parent)
+        super().__init__(
+            parent
+        )
 
-        self.title(title)
+
+        self.title(
+            title
+        )
+
 
         self.configure(
             bg=BG
         )
+
 
         self.resizable(
             False,
             False,
         )
 
+
         self.result = None
 
-        self.transient(parent)
+
+        self.transient(
+            parent
+        )
+
 
         self.grab_set()
 
 
-        # ====================================================
-        # WINDOW ICON
-        # ====================================================
+        # ----------------------------------------------------
+        # ICON
+        # ----------------------------------------------------
 
         try:
 
@@ -768,8 +1313,13 @@ class AccountDialog(tk.Toplevel):
                 )
 
         except Exception:
+
             pass
 
+
+        # ----------------------------------------------------
+        # DARK TITLE BAR
+        # ----------------------------------------------------
 
         enable_dark_title_bar(
             self
@@ -790,13 +1340,15 @@ class AccountDialog(tk.Toplevel):
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # NUMBER
-        # ====================================================
+        # ----------------------------------------------------
 
         tk.Label(
             frame,
-            text="Account number (0 - 100)",
+            text=(
+                "Account number (0 - 100)"
+            ),
             bg=BG,
             fg=TEXT,
             font=(
@@ -810,29 +1362,40 @@ class AccountDialog(tk.Toplevel):
         )
 
 
-        self.number_var = tk.StringVar(
-            value=(
-                str(
-                    existing["number"]
+        self.number_var = (
+            tk.StringVar(
+                value=(
+                    str(
+                        existing[
+                            "number"
+                        ]
+                    )
+                    if existing
+                    else ""
                 )
-                if existing
-                else ""
             )
         )
 
 
-        self.number_entry = tk.Entry(
-            frame,
-            textvariable=self.number_var,
-            bg=PANEL,
-            fg=TEXT,
-            insertbackground=TEXT,
-            relief="flat",
-            bd=0,
-            font=(
-                "Segoe UI",
-                11,
-            ),
+        self.number_entry = (
+            tk.Entry(
+                frame,
+                textvariable=(
+                    self.number_var
+                ),
+                bg=PANEL,
+                fg=TEXT,
+                insertbackground=TEXT,
+                selectbackground=BLUE_DARK,
+                selectforeground="#ffffff",
+                relief="flat",
+                bd=0,
+                highlightthickness=0,
+                font=(
+                    "Segoe UI",
+                    11,
+                ),
+            )
         )
 
 
@@ -843,9 +1406,9 @@ class AccountDialog(tk.Toplevel):
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # LOGIN
-        # ====================================================
+        # ----------------------------------------------------
 
         tk.Label(
             frame,
@@ -863,27 +1426,38 @@ class AccountDialog(tk.Toplevel):
         )
 
 
-        self.login_var = tk.StringVar(
-            value=(
-                existing["login"]
-                if existing
-                else ""
+        self.login_var = (
+            tk.StringVar(
+                value=(
+                    existing[
+                        "login"
+                    ]
+                    if existing
+                    else ""
+                )
             )
         )
 
 
-        self.login_entry = tk.Entry(
-            frame,
-            textvariable=self.login_var,
-            bg=PANEL,
-            fg=TEXT,
-            insertbackground=TEXT,
-            relief="flat",
-            bd=0,
-            font=(
-                "Segoe UI",
-                11,
-            ),
+        self.login_entry = (
+            tk.Entry(
+                frame,
+                textvariable=(
+                    self.login_var
+                ),
+                bg=PANEL,
+                fg=TEXT,
+                insertbackground=TEXT,
+                selectbackground=BLUE_DARK,
+                selectforeground="#ffffff",
+                relief="flat",
+                bd=0,
+                highlightthickness=0,
+                font=(
+                    "Segoe UI",
+                    11,
+                ),
+            )
         )
 
 
@@ -894,9 +1468,9 @@ class AccountDialog(tk.Toplevel):
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # NOTE
-        # ====================================================
+        # ----------------------------------------------------
 
         tk.Label(
             frame,
@@ -914,27 +1488,38 @@ class AccountDialog(tk.Toplevel):
         )
 
 
-        self.note_var = tk.StringVar(
-            value=(
-                existing["note"]
-                if existing
-                else ""
+        self.note_var = (
+            tk.StringVar(
+                value=(
+                    existing[
+                        "note"
+                    ]
+                    if existing
+                    else ""
+                )
             )
         )
 
 
-        self.note_entry = tk.Entry(
-            frame,
-            textvariable=self.note_var,
-            bg=PANEL,
-            fg=TEXT,
-            insertbackground=TEXT,
-            relief="flat",
-            bd=0,
-            font=(
-                "Segoe UI",
-                11,
-            ),
+        self.note_entry = (
+            tk.Entry(
+                frame,
+                textvariable=(
+                    self.note_var
+                ),
+                bg=PANEL,
+                fg=TEXT,
+                insertbackground=TEXT,
+                selectbackground=BLUE_DARK,
+                selectforeground="#ffffff",
+                relief="flat",
+                bd=0,
+                highlightthickness=0,
+                font=(
+                    "Segoe UI",
+                    11,
+                ),
+            )
         )
 
 
@@ -945,9 +1530,9 @@ class AccountDialog(tk.Toplevel):
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # BUTTONS
-        # ====================================================
+        # ----------------------------------------------------
 
         buttons = tk.Frame(
             frame,
@@ -970,6 +1555,7 @@ class AccountDialog(tk.Toplevel):
             activeforeground=TEXT,
             relief="flat",
             bd=0,
+            highlightthickness=0,
             cursor="hand2",
             padx=18,
             pady=8,
@@ -985,13 +1571,20 @@ class AccountDialog(tk.Toplevel):
         save = tk.Button(
             buttons,
             text="Save",
-            command=self.save_account,
+            command=(
+                self.save_account
+            ),
             bg=ORANGE,
             fg="#000000",
-            activebackground=ORANGE_HOVER,
-            activeforeground="#000000",
+            activebackground=(
+                ORANGE_HOVER
+            ),
+            activeforeground=(
+                "#000000"
+            ),
             relief="flat",
             bd=0,
+            highlightthickness=0,
             cursor="hand2",
             padx=22,
             pady=8,
@@ -1023,9 +1616,11 @@ class AccountDialog(tk.Toplevel):
 
 
         if existing:
+
             self.login_entry.focus_set()
 
         else:
+
             self.number_entry.focus_set()
 
 
@@ -1038,7 +1633,13 @@ class AccountDialog(tk.Toplevel):
         )
 
 
-    def save_account(self):
+    # --------------------------------------------------------
+    # SAVE
+    # --------------------------------------------------------
+
+    def save_account(
+        self,
+    ):
 
         number_text = (
             self.number_var
@@ -1076,10 +1677,15 @@ class AccountDialog(tk.Toplevel):
             return
 
 
-        number = int(number_text)
+        number = int(
+            number_text
+        )
 
 
-        if number < 0 or number > 100:
+        if (
+            number < 0
+            or number > 100
+        ):
 
             messagebox.showerror(
                 APP_NAME,
@@ -1090,8 +1696,10 @@ class AccountDialog(tk.Toplevel):
             return
 
 
-        ok, error = validate_login(
-            login
+        ok, error = (
+            validate_login(
+                login
+            )
         )
 
 
@@ -1106,8 +1714,10 @@ class AccountDialog(tk.Toplevel):
             return
 
 
-        ok, error = validate_note(
-            note
+        ok, error = (
+            validate_note(
+                note
+            )
         )
 
 
@@ -1133,7 +1743,7 @@ class AccountDialog(tk.Toplevel):
 
 
 # ============================================================
-# MAIN APPLICATION
+# MAIN APP
 # ============================================================
 
 class SteamSwapperApp:
@@ -1146,9 +1756,9 @@ class SteamSwapperApp:
         self.root = root
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # WINDOW
-        # ====================================================
+        # ----------------------------------------------------
 
         self.root.title(
             APP_NAME
@@ -1171,50 +1781,52 @@ class SteamSwapperApp:
         )
 
 
-        # ====================================================
-        # WINDOW ICON - 2.ico
-        # ====================================================
+        # ----------------------------------------------------
+        # ICON
+        # ----------------------------------------------------
 
         self.apply_window_icon()
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # DARK TITLE BAR
-        # ====================================================
+        # ----------------------------------------------------
 
         enable_dark_title_bar(
             self.root
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # DATABASE
-        # ====================================================
+        # ----------------------------------------------------
 
-        self.store = AccountStore(
-            DATA_FILE
+        self.store = (
+            AccountStore(
+                DATA_FILE
+            )
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # STEAM
-        # ====================================================
+        # ----------------------------------------------------
 
         self.steam_exe = (
             find_steam_executable()
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # LOGO
-        # ====================================================
+        # ----------------------------------------------------
 
         self.logo_image = None
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # UI
-        # ====================================================
+        # ----------------------------------------------------
 
         self.configure_styles()
 
@@ -1244,7 +1856,9 @@ class SteamSwapperApp:
     # WINDOW ICON
     # ========================================================
 
-    def apply_window_icon(self):
+    def apply_window_icon(
+        self,
+    ):
 
         try:
 
@@ -1264,20 +1878,25 @@ class SteamSwapperApp:
 
 
     # ========================================================
-    # LOAD MAIN LOGO - 2.png
+    # LOAD LOGO
     # ========================================================
 
-    def load_logo(self):
+    def load_logo(
+        self,
+    ):
 
         if not LOGO_FILE.exists():
+
             return None
 
 
         try:
 
-            image = tk.PhotoImage(
-                file=str(
-                    LOGO_FILE
+            image = (
+                tk.PhotoImage(
+                    file=str(
+                        LOGO_FILE
+                    )
                 )
             )
 
@@ -1285,8 +1904,13 @@ class SteamSwapperApp:
             max_size = 145
 
 
-            width = image.width()
-            height = image.height()
+            width = (
+                image.width()
+            )
+
+            height = (
+                image.height()
+            )
 
 
             biggest = max(
@@ -1304,9 +1928,11 @@ class SteamSwapperApp:
                 ) // max_size
 
 
-                image = image.subsample(
-                    factor,
-                    factor,
+                image = (
+                    image.subsample(
+                        factor,
+                        factor,
+                    )
                 )
 
 
@@ -1322,7 +1948,9 @@ class SteamSwapperApp:
     # STYLES
     # ========================================================
 
-    def configure_styles(self):
+    def configure_styles(
+        self,
+    ):
 
         style = ttk.Style()
 
@@ -1332,14 +1960,26 @@ class SteamSwapperApp:
         )
 
 
+        # ----------------------------------------------------
+        # IMPORTANT:
+        #
+        # borderwidth=0
+        # relief=flat
+        #
+        # removes the bright/white Treeview border.
+        # ----------------------------------------------------
+
         style.configure(
             "Dark.Treeview",
             background=PANEL,
             fieldbackground=PANEL,
             foreground=TEXT,
-            rowheight=36,
+
             borderwidth=0,
             relief="flat",
+
+            rowheight=36,
+
             font=(
                 "Segoe UI",
                 10,
@@ -1364,13 +2004,20 @@ class SteamSwapperApp:
         )
 
 
+        # ----------------------------------------------------
+        # HEADER
+        # ----------------------------------------------------
+
         style.configure(
             "Dark.Treeview.Heading",
             background=PANEL_ALT,
             foreground=TEXT,
+
             borderwidth=0,
             relief="flat",
+
             padding=10,
+
             font=(
                 "Segoe UI",
                 9,
@@ -1384,32 +2031,51 @@ class SteamSwapperApp:
             background=[
                 (
                     "active",
-                    BORDER,
+                    PANEL_ALT,
                 )
             ],
         )
 
 
-        style.configure(
-            "Vertical.TScrollbar",
-            background=PANEL_ALT,
-            troughcolor=BG,
-            bordercolor=BG,
-            arrowcolor=TEXT,
-        )
+        # ----------------------------------------------------
+        # Remove Treeview layout border
+        # ----------------------------------------------------
+
+        try:
+
+            style.layout(
+                "Dark.Treeview",
+                [
+                    (
+                        "Treeview.treearea",
+                        {
+                            "sticky": "nswe"
+                        },
+                    )
+                ],
+            )
+
+        except tk.TclError:
+
+            pass
 
 
     # ========================================================
     # BUILD UI
     # ========================================================
 
-    def build_ui(self):
+    def build_ui(
+        self,
+    ):
 
         outer = tk.Frame(
             self.root,
             bg=BG,
             padx=25,
             pady=20,
+
+            bd=0,
+            highlightthickness=0,
         )
 
 
@@ -1419,9 +2085,9 @@ class SteamSwapperApp:
         )
 
 
-        # ====================================================
-        # MAIN LOGO - 2.png
-        # ====================================================
+        # ----------------------------------------------------
+        # LOGO
+        # ----------------------------------------------------
 
         self.logo_image = (
             self.load_logo()
@@ -1432,9 +2098,13 @@ class SteamSwapperApp:
 
             logo = tk.Label(
                 outer,
-                image=self.logo_image,
+                image=(
+                    self.logo_image
+                ),
                 bg=BG,
+
                 bd=0,
+                highlightthickness=0,
             )
 
 
@@ -1443,15 +2113,19 @@ class SteamSwapperApp:
             )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # TITLE
-        # ====================================================
+        # ----------------------------------------------------
 
         title = tk.Label(
             outer,
             text="STEAM SWAPPER",
             bg=BG,
             fg=TEXT,
+
+            bd=0,
+            highlightthickness=0,
+
             font=(
                 "Segoe UI",
                 22,
@@ -1465,9 +2139,16 @@ class SteamSwapperApp:
 
         subtitle = tk.Label(
             outer,
-            text="Choose an account and switch instantly.",
+            text=(
+                "Choose an account "
+                "and switch instantly."
+            ),
             bg=BG,
             fg=MUTED,
+
+            bd=0,
+            highlightthickness=0,
+
             font=(
                 "Segoe UI",
                 10,
@@ -1480,21 +2161,42 @@ class SteamSwapperApp:
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # TABLE
-        # ====================================================
+        #
+        # IMPORTANT:
+        # No highlight border.
+        # No white outline.
+        # ----------------------------------------------------
 
-        table_container = tk.Frame(
-            outer,
-            bg=PANEL,
-            highlightbackground=BORDER,
-            highlightthickness=1,
+        table_container = (
+            tk.Frame(
+                outer,
+                bg=PANEL,
+
+                bd=0,
+                highlightthickness=0,
+                relief="flat",
+            )
         )
 
 
         table_container.pack(
             fill="both",
             expand=True,
+        )
+
+
+        # Grid is easier here because we have our own scrollbar
+        table_container.grid_rowconfigure(
+            0,
+            weight=1,
+        )
+
+
+        table_container.grid_columnconfigure(
+            0,
+            weight=1,
         )
 
 
@@ -1505,14 +2207,25 @@ class SteamSwapperApp:
         )
 
 
-        self.tree = ttk.Treeview(
-            table_container,
-            columns=columns,
-            show="headings",
-            selectmode="browse",
-            style="Dark.Treeview",
+        self.tree = (
+            ttk.Treeview(
+                table_container,
+                columns=columns,
+
+                show="headings",
+
+                selectmode="browse",
+
+                style=(
+                    "Dark.Treeview"
+                ),
+            )
         )
 
+
+        # ----------------------------------------------------
+        # HEADINGS
+        # ----------------------------------------------------
 
         self.tree.heading(
             "number",
@@ -1532,9 +2245,14 @@ class SteamSwapperApp:
         )
 
 
+        # ----------------------------------------------------
+        # COLUMNS
+        # ----------------------------------------------------
+
         self.tree.column(
             "number",
             width=75,
+            minwidth=60,
             stretch=False,
             anchor="center",
         )
@@ -1542,46 +2260,69 @@ class SteamSwapperApp:
 
         self.tree.column(
             "login",
-            width=260,
+            width=280,
+            minwidth=180,
             anchor="w",
         )
 
 
         self.tree.column(
             "note",
-            width=400,
+            width=420,
+            minwidth=200,
             anchor="w",
         )
 
 
-        scrollbar = ttk.Scrollbar(
+        # ----------------------------------------------------
+        # CUSTOM BLACK ROUNDED SCROLLBAR
+        # ----------------------------------------------------
+
+        self.scrollbar = RoundedScrollbar(
             table_container,
-            orient="vertical",
             command=self.tree.yview,
+            width=14,
         )
 
 
         self.tree.configure(
-            yscrollcommand=scrollbar.set
+            yscrollcommand=(
+                self.scrollbar.set
+            )
         )
 
 
-        self.tree.pack(
-            side="left",
-            fill="both",
-            expand=True,
+        self.tree.grid(
+            row=0,
+            column=0,
+
+            sticky="nsew",
         )
 
 
-        scrollbar.pack(
-            side="right",
-            fill="y",
+        self.scrollbar.grid(
+            row=0,
+            column=1,
+
+            sticky="ns",
+
+            padx=(4, 0),
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
+        # MOUSE WHEEL
+        # ----------------------------------------------------
+
+        self.tree.bind(
+            "<MouseWheel>",
+            self._mousewheel,
+        )
+
+
+        # ----------------------------------------------------
         # EVENTS
-        # ====================================================
+        # ----------------------------------------------------
 
         self.tree.bind(
             "<Double-1>",
@@ -1604,13 +2345,16 @@ class SteamSwapperApp:
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # BUTTONS
-        # ====================================================
+        # ----------------------------------------------------
 
         buttons = tk.Frame(
             outer,
             bg=BG,
+
+            bd=0,
+            highlightthickness=0,
         )
 
 
@@ -1659,24 +2403,45 @@ class SteamSwapperApp:
         )
 
 
-        self.switch_button = tk.Button(
-            buttons,
-            text="SWITCH ACCOUNT",
-            command=self.switch_selected,
-            bg=ORANGE,
-            fg="#000000",
-            activebackground=ORANGE_HOVER,
-            activeforeground="#000000",
-            relief="flat",
-            bd=0,
-            cursor="hand2",
-            padx=24,
-            pady=9,
-            font=(
-                "Segoe UI",
-                9,
-                "bold",
-            ),
+        self.switch_button = (
+            tk.Button(
+                buttons,
+
+                text=(
+                    "SWITCH ACCOUNT"
+                ),
+
+                command=(
+                    self.switch_selected
+                ),
+
+                bg=ORANGE,
+                fg="#000000",
+
+                activebackground=(
+                    ORANGE_HOVER
+                ),
+
+                activeforeground=(
+                    "#000000"
+                ),
+
+                relief="flat",
+
+                bd=0,
+                highlightthickness=0,
+
+                cursor="hand2",
+
+                padx=24,
+                pady=9,
+
+                font=(
+                    "Segoe UI",
+                    9,
+                    "bold",
+                ),
+            )
         )
 
 
@@ -1685,19 +2450,30 @@ class SteamSwapperApp:
         )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # STATUS
-        # ====================================================
+        # ----------------------------------------------------
 
-        self.status_var = tk.StringVar()
+        self.status_var = (
+            tk.StringVar()
+        )
 
 
         status = tk.Label(
             outer,
-            textvariable=self.status_var,
+
+            textvariable=(
+                self.status_var
+            ),
+
             bg=BG,
             fg=MUTED,
+
             anchor="w",
+
+            bd=0,
+            highlightthickness=0,
+
             font=(
                 "Segoe UI",
                 9,
@@ -1712,7 +2488,30 @@ class SteamSwapperApp:
 
 
     # ========================================================
-    # STANDARD BUTTON
+    # MOUSE WHEEL
+    # ========================================================
+
+    def _mousewheel(
+        self,
+        event,
+    ):
+
+        self.tree.yview_scroll(
+            int(
+                -1
+                * (
+                    event.delta / 120
+                )
+            ),
+            "units",
+        )
+
+
+        return "break"
+
+
+    # ========================================================
+    # BUTTON
     # ========================================================
 
     def create_button(
@@ -1724,17 +2523,27 @@ class SteamSwapperApp:
 
         return tk.Button(
             parent,
+
             text=text,
+
             command=command,
+
             bg=PANEL_ALT,
             fg=TEXT,
+
             activebackground=BORDER,
             activeforeground=TEXT,
+
             relief="flat",
+
             bd=0,
+            highlightthickness=0,
+
             cursor="hand2",
+
             padx=15,
             pady=8,
+
             font=(
                 "Segoe UI",
                 9,
@@ -1746,15 +2555,24 @@ class SteamSwapperApp:
     # WARNING
     # ========================================================
 
-    def warn_steam_missing(self):
+    def warn_steam_missing(
+        self,
+    ):
 
         messagebox.showwarning(
             APP_NAME,
+
             (
-                "Steam could not be detected automatically.\n\n"
-                "Account management will continue working, but "
-                "switching accounts requires Steam to be detected."
+                "Steam could not be "
+                "detected automatically.\n\n"
+
+                "Account management will "
+                "continue working, but "
+
+                "switching accounts requires "
+                "Steam to be detected."
             ),
+
             parent=self.root,
         )
 
@@ -1763,11 +2581,15 @@ class SteamSwapperApp:
     # REFRESH
     # ========================================================
 
-    def refresh(self):
+    def refresh(
+        self,
+    ):
 
         try:
 
-            accounts = self.store.load()
+            accounts = (
+                self.store.load()
+            )
 
         except RuntimeError as exc:
 
@@ -1780,7 +2602,9 @@ class SteamSwapperApp:
             return
 
 
-        for item in self.tree.get_children():
+        for item in (
+            self.tree.get_children()
+        ):
 
             self.tree.delete(
                 item
@@ -1792,9 +2616,11 @@ class SteamSwapperApp:
             self.tree.insert(
                 "",
                 "end",
+
                 iid=str(
                     account["number"]
                 ),
+
                 values=(
                     account["number"],
                     account["login"],
@@ -1806,7 +2632,8 @@ class SteamSwapperApp:
         if self.steam_exe:
 
             steam_text = (
-                f"Steam: {self.steam_exe}"
+                f"Steam: "
+                f"{self.steam_exe}"
             )
 
         else:
@@ -1817,7 +2644,9 @@ class SteamSwapperApp:
 
 
         self.status_var.set(
-            f"{len(accounts)} account(s) registered  •  {steam_text}"
+            f"{len(accounts)} "
+            f"account(s) registered  •  "
+            f"{steam_text}"
         )
 
 
@@ -1825,7 +2654,9 @@ class SteamSwapperApp:
     # SELECTED ACCOUNT
     # ========================================================
 
-    def selected_account(self):
+    def selected_account(
+        self,
+    ):
 
         selection = (
             self.tree.selection()
@@ -1848,9 +2679,14 @@ class SteamSwapperApp:
         )
 
 
-        for account in self.store.load():
+        for account in (
+            self.store.load()
+        ):
 
-            if account["number"] == number:
+            if (
+                account["number"]
+                == number
+            ):
 
                 return account
 
@@ -1861,10 +2697,12 @@ class SteamSwapperApp:
 
 
     # ========================================================
-    # ADD ACCOUNT
+    # ADD
     # ========================================================
 
-    def add_account(self):
+    def add_account(
+        self,
+    ):
 
         dialog = AccountDialog(
             self.root,
@@ -1878,6 +2716,7 @@ class SteamSwapperApp:
 
 
         if dialog.result is None:
+
             return
 
 
@@ -1919,9 +2758,11 @@ class SteamSwapperApp:
                 str(number)
             )
 
+
             self.tree.focus(
                 str(number)
             )
+
 
             self.tree.see(
                 str(number)
@@ -1929,10 +2770,12 @@ class SteamSwapperApp:
 
 
     # ========================================================
-    # EDIT ACCOUNT
+    # EDIT
     # ========================================================
 
-    def edit_selected(self):
+    def edit_selected(
+        self,
+    ):
 
         account = (
             self.selected_account()
@@ -1940,6 +2783,7 @@ class SteamSwapperApp:
 
 
         if account is None:
+
             return
 
 
@@ -1956,6 +2800,7 @@ class SteamSwapperApp:
 
 
         if dialog.result is None:
+
             return
 
 
@@ -1998,16 +2843,19 @@ class SteamSwapperApp:
                 str(number)
             )
 
+
             self.tree.focus(
                 str(number)
             )
 
 
     # ========================================================
-    # REMOVE ACCOUNT
+    # REMOVE
     # ========================================================
 
-    def remove_selected(self):
+    def remove_selected(
+        self,
+    ):
 
         account = (
             self.selected_account()
@@ -2015,22 +2863,34 @@ class SteamSwapperApp:
 
 
         if account is None:
+
             return
 
 
-        answer = messagebox.askyesno(
-            APP_NAME,
-            (
-                "Remove this account from Steam Swapper?\n\n"
-                f"[{account['number']}] {account['login']}\n"
-                f"{account['note']}\n\n"
-                "This does not remove the actual Steam account."
-            ),
-            parent=self.root,
+        answer = (
+            messagebox.askyesno(
+                APP_NAME,
+
+                (
+                    "Remove this account "
+                    "from Steam Swapper?\n\n"
+
+                    f"[{account['number']}] "
+                    f"{account['login']}\n"
+
+                    f"{account['note']}\n\n"
+
+                    "This does not remove "
+                    "the actual Steam account."
+                ),
+
+                parent=self.root,
+            )
         )
 
 
         if not answer:
+
             return
 
 
@@ -2058,10 +2918,12 @@ class SteamSwapperApp:
 
 
     # ========================================================
-    # SWITCH ACCOUNT
+    # SWITCH
     # ========================================================
 
-    def switch_selected(self):
+    def switch_selected(
+        self,
+    ):
 
         account = (
             self.selected_account()
@@ -2069,6 +2931,7 @@ class SteamSwapperApp:
 
 
         if account is None:
+
             return
 
 
@@ -2088,24 +2951,34 @@ class SteamSwapperApp:
             return
 
 
-        answer = messagebox.askyesno(
-            APP_NAME,
-            (
-                "Switch Steam account?\n\n"
-                f"[{account['number']}] {account['login']}\n"
-                f"{account['note']}\n\n"
-                "Steam will be restarted."
-            ),
-            parent=self.root,
+        answer = (
+            messagebox.askyesno(
+                APP_NAME,
+
+                (
+                    "Switch Steam account?\n\n"
+
+                    f"[{account['number']}] "
+                    f"{account['login']}\n"
+
+                    f"{account['note']}\n\n"
+
+                    "Steam will be restarted."
+                ),
+
+                parent=self.root,
+            )
         )
 
 
         if not answer:
+
             return
 
 
         self.status_var.set(
-            f"Closing Steam... {account['login']}"
+            "Closing Steam... "
+            f"{account['login']}"
         )
 
 
@@ -2128,7 +3001,12 @@ class SteamSwapperApp:
 
             messagebox.showerror(
                 APP_NAME,
-                f"Could not start Steam:\n\n{exc}",
+
+                (
+                    "Could not start "
+                    f"Steam:\n\n{exc}"
+                ),
+
                 parent=self.root,
             )
 
@@ -2136,8 +3014,11 @@ class SteamSwapperApp:
 
 
         self.status_var.set(
-            f'Steam started for "{account["login"]}". '
-            f"Steam may request authentication if necessary."
+            f'Steam started for '
+            f'"{account["login"]}". '
+
+            "Steam may request "
+            "authentication if necessary."
         )
 
 
@@ -2149,9 +3030,11 @@ def main():
 
     root = tk.Tk()
 
+
     SteamSwapperApp(
         root
     )
+
 
     root.mainloop()
 
