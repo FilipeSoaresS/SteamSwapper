@@ -1,0 +1,672 @@
+('G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+ 'SWAPPER\\SteamSwapper\\build\\SteamSwapper\\SteamSwapper.pkg',
+ {'BINARY': True,
+  'DATA': True,
+  'EXECUTABLE': True,
+  'EXTENSION': True,
+  'PYMODULE': True,
+  'PYSOURCE': True,
+  'PYZ': False,
+  'SPLASH': True,
+  'SYMLINK': False},
+ [('pyi-contents-directory _internal', '', 'OPTION'),
+  ('PYZ-00.pyz',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\build\\SteamSwapper\\PYZ-00.pyz',
+   'PYZ'),
+  ('struct',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\build\\SteamSwapper\\localpycs\\struct.pyc',
+   'PYMODULE'),
+  ('pyimod01_archive',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\build\\SteamSwapper\\localpycs\\pyimod01_archive.pyc',
+   'PYMODULE'),
+  ('pyimod02_importers',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\build\\SteamSwapper\\localpycs\\pyimod02_importers.pyc',
+   'PYMODULE'),
+  ('pyimod03_ctypes',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\build\\SteamSwapper\\localpycs\\pyimod03_ctypes.pyc',
+   'PYMODULE'),
+  ('pyimod04_pywin32',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\build\\SteamSwapper\\localpycs\\pyimod04_pywin32.pyc',
+   'PYMODULE'),
+  ('pyiboot01_bootstrap',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
+   'PYSOURCE'),
+  ('pyi_rth_inspect',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
+   'PYSOURCE'),
+  ('pyi_rth_pyside6',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pyside6.py',
+   'PYSOURCE'),
+  ('app',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM SWAPPER\\SteamSwapper\\app.py',
+   'PYSOURCE'),
+  ('python314.dll', 'C:\\Python314\\python314.dll', 'BINARY'),
+  ('PySide6\\opengl32sw.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\opengl32sw.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\tls\\qschannelbackend.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\tls\\qschannelbackend.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\networkinformation\\qnetworklistmanager.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\networkinformation\\qnetworklistmanager.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\tls\\qcertonlybackend.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\tls\\qcertonlybackend.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\tls\\qopensslbackend.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\tls\\qopensslbackend.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\platforms\\qminimal.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\platforms\\qminimal.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qwebp.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qwebp.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\platforms\\qoffscreen.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\platforms\\qoffscreen.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qjpeg.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qjpeg.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qtga.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qtga.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\generic\\qtuiotouchplugin.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\generic\\qtuiotouchplugin.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qico.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qico.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qicns.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qicns.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qtiff.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qtiff.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\platforms\\qdirect2d.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\platforms\\qdirect2d.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qgif.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qgif.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\platforms\\qwindows.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\platforms\\qwindows.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\platforminputcontexts\\qtvirtualkeyboardplugin.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\platforminputcontexts\\qtvirtualkeyboardplugin.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qsvg.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qsvg.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qwbmp.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qwbmp.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\imageformats\\qpdf.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\imageformats\\qpdf.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\iconengines\\qsvgicon.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\iconengines\\qsvgicon.dll',
+   'BINARY'),
+  ('PySide6\\plugins\\styles\\qmodernwindowsstyle.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\plugins\\styles\\qmodernwindowsstyle.dll',
+   'BINARY'),
+  ('_zstd.pyd', 'C:\\Python314\\DLLs\\_zstd.pyd', 'EXTENSION'),
+  ('_lzma.pyd', 'C:\\Python314\\DLLs\\_lzma.pyd', 'EXTENSION'),
+  ('_bz2.pyd', 'C:\\Python314\\DLLs\\_bz2.pyd', 'EXTENSION'),
+  ('_decimal.pyd', 'C:\\Python314\\DLLs\\_decimal.pyd', 'EXTENSION'),
+  ('_hashlib.pyd', 'C:\\Python314\\DLLs\\_hashlib.pyd', 'EXTENSION'),
+  ('select.pyd', 'C:\\Python314\\DLLs\\select.pyd', 'EXTENSION'),
+  ('_socket.pyd', 'C:\\Python314\\DLLs\\_socket.pyd', 'EXTENSION'),
+  ('unicodedata.pyd', 'C:\\Python314\\DLLs\\unicodedata.pyd', 'EXTENSION'),
+  ('_ssl.pyd', 'C:\\Python314\\DLLs\\_ssl.pyd', 'EXTENSION'),
+  ('PySide6\\QtCore.pyd',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\QtCore.pyd',
+   'EXTENSION'),
+  ('shiboken6\\Shiboken.pyd',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\shiboken6\\Shiboken.pyd',
+   'EXTENSION'),
+  ('PySide6\\QtNetwork.pyd',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\QtNetwork.pyd',
+   'EXTENSION'),
+  ('PySide6\\QtGui.pyd',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\QtGui.pyd',
+   'EXTENSION'),
+  ('PySide6\\QtWidgets.pyd',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\QtWidgets.pyd',
+   'EXTENSION'),
+  ('VCRUNTIME140.dll', 'C:\\Python314\\VCRUNTIME140.dll', 'BINARY'),
+  ('PySide6\\Qt6Core.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6Core.dll',
+   'BINARY'),
+  ('PySide6\\Qt6Network.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6Network.dll',
+   'BINARY'),
+  ('shiboken6\\MSVCP140.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\shiboken6\\MSVCP140.dll',
+   'BINARY'),
+  ('VCRUNTIME140_1.dll', 'C:\\Python314\\VCRUNTIME140_1.dll', 'BINARY'),
+  ('PySide6\\Qt6Gui.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6Gui.dll',
+   'BINARY'),
+  ('PySide6\\Qt6VirtualKeyboard.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6VirtualKeyboard.dll',
+   'BINARY'),
+  ('PySide6\\Qt6Svg.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6Svg.dll',
+   'BINARY'),
+  ('PySide6\\Qt6Pdf.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6Pdf.dll',
+   'BINARY'),
+  ('PySide6\\Qt6Widgets.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6Widgets.dll',
+   'BINARY'),
+  ('libcrypto-3.dll', 'C:\\Python314\\DLLs\\libcrypto-3.dll', 'BINARY'),
+  ('libssl-3.dll', 'C:\\Python314\\DLLs\\libssl-3.dll', 'BINARY'),
+  ('python3.dll', 'C:\\Python314\\python3.dll', 'BINARY'),
+  ('PySide6\\pyside6.abi3.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\pyside6.abi3.dll',
+   'BINARY'),
+  ('shiboken6\\shiboken6.abi3.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\shiboken6\\shiboken6.abi3.dll',
+   'BINARY'),
+  ('PySide6\\MSVCP140.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\MSVCP140.dll',
+   'BINARY'),
+  ('PySide6\\VCRUNTIME140.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\VCRUNTIME140.dll',
+   'BINARY'),
+  ('PySide6\\VCRUNTIME140_1.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\VCRUNTIME140_1.dll',
+   'BINARY'),
+  ('shiboken6\\VCRUNTIME140.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\shiboken6\\VCRUNTIME140.dll',
+   'BINARY'),
+  ('shiboken6\\VCRUNTIME140_1.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\shiboken6\\VCRUNTIME140_1.dll',
+   'BINARY'),
+  ('PySide6\\MSVCP140_2.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\MSVCP140_2.dll',
+   'BINARY'),
+  ('PySide6\\MSVCP140_1.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\MSVCP140_1.dll',
+   'BINARY'),
+  ('PySide6\\Qt6Quick.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6Quick.dll',
+   'BINARY'),
+  ('PySide6\\Qt6Qml.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6Qml.dll',
+   'BINARY'),
+  ('PySide6\\Qt6QmlMeta.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6QmlMeta.dll',
+   'BINARY'),
+  ('PySide6\\Qt6QmlModels.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6QmlModels.dll',
+   'BINARY'),
+  ('PySide6\\Qt6OpenGL.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6OpenGL.dll',
+   'BINARY'),
+  ('PySide6\\Qt6QmlWorkerScript.dll',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\Qt6QmlWorkerScript.dll',
+   'BINARY'),
+  ('img\\2.ico',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM SWAPPER\\SteamSwapper\\img\\2.ico',
+   'DATA'),
+  ('img\\2.png',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM SWAPPER\\SteamSwapper\\img\\2.png',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_ja.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_ja.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_ka.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_ka.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_fr.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_fr.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_ru.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_ru.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_nl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_nl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_bg.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_bg.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_ru.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_ru.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_de.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_de.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_sk.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_sk.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_ka.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_ka.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_bg.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_bg.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_sv.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_sv.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_en.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_en.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_ko.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_ko.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_de.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_de.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_es.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_es.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_tr.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_tr.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_zh_TW.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_zh_TW.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_es.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_es.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_cs.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_cs.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_pl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_pl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_gl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_gl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_sv.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_sv.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_ar.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_ar.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_en.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_en.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_de.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_de.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_lt.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_lt.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_ca.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_ca.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_pt_BR.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_pt_BR.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_fa.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_fa.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_pl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_pl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_zh_TW.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_zh_TW.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_ru.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_ru.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_fi.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_fi.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_pt_BR.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_pt_BR.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_ja.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_ja.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_sk.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_sk.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_nn.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_nn.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_zh_CN.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_zh_CN.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_ar.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_ar.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_fr.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_fr.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_ar.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_ar.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_gd.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_gd.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_lg.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_lg.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_gl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_gl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_it.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_it.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_gd.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_gd.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_nn.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_nn.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_hu.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_hu.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_he.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_he.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_uk.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_uk.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_pl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_pl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_ca.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_ca.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_zh_TW.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_zh_TW.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_lv.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_lv.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_hr.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_hr.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_uk.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_uk.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_lv.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_lv.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_he.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_he.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_nl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_nl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_en.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_en.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_tr.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_tr.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_sk.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_sk.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_uk.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_uk.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_sl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_sl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_fa.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_fa.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_zh_CN.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_zh_CN.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_bg.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_bg.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_pt_PT.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_pt_PT.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_zh_CN.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_zh_CN.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_hu.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_hu.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_it.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_it.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_fi.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_fi.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_nl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_nl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_hr.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_hr.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_sv.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_sv.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_hr.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_hr.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_da.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_da.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_it.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_it.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_ca.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_ca.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_hu.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_hu.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_sl.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_sl.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_ja.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_ja.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_ko.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_ko.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_nn.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_nn.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_cs.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_cs.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_pt_BR.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_pt_BR.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_cs.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_cs.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_tr.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_tr.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_lg.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_lg.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_da.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_da.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_da.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_da.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_ka.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_ka.qm',
+   'DATA'),
+  ('PySide6\\translations\\qtbase_ko.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qtbase_ko.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_help_es.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_help_es.qm',
+   'DATA'),
+  ('PySide6\\translations\\qt_fr.qm',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\venv\\Lib\\site-packages\\PySide6\\translations\\qt_fr.qm',
+   'DATA'),
+  ('base_library.zip',
+   'G:\\Meu Drive\\000-DEVELOPMENT\\STEAM '
+   'SWAPPER\\SteamSwapper\\build\\SteamSwapper\\base_library.zip',
+   'DATA')],
+ 'python314.dll',
+ False,
+ False,
+ False,
+ [],
+ None,
+ None,
+ None)

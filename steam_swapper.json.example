@@ -1,0 +1,10 @@
+{
+    "accounts": [],
+    "settings": {
+        "view": "list",
+        "sort": "name_asc",
+        "launch_mode": "online",
+        "theme": "dark",
+        "language": "pt-BR"
+    }
+}
