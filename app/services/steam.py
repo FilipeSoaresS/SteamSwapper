@@ -83,20 +83,29 @@ class SteamService:
                 return True
             time.sleep(0.5)
 
-        for process in ("steam.exe", "steamwebhelper.exe", "gameoverlayui.exe"):
-            try:
-                subprocess.run(
-                    ["taskkill", "/F", "/IM", process],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                    creationflags=flags,
-                    check=False,
-                )
-            except OSError:
-                pass
+        # Do not forcibly terminate the game overlay: it may belong to a
+        # running game, and killing it can interrupt Steamworks/SteamAPI.
+        # Only force-close the Steam client itself after graceful shutdown
+        # has timed out. Let Steam's helpers exit with their parent process.
+        try:
+            subprocess.run(
+                ["taskkill", "/F", "/IM", "steam.exe"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                creationflags=flags,
+                check=False,
+            )
+        except OSError:
+            pass
 
-        time.sleep(1.5)
-        return not self.is_running()
+        # A successful taskkill invocation does not guarantee that Steam
+        # has fully exited. Wait for the client before changing account data.
+        for _ in range(20):
+            if not self.is_running():
+                time.sleep(1.5)
+                return True
+            time.sleep(0.5)
+        return False
 
     def _loginusers_file(self, steam_exe):
         return Path(steam_exe).resolve().parent / "config" / "loginusers.vdf"
