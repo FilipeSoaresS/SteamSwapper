@@ -4,7 +4,7 @@
         "view": "grid",
         "sort": "name_asc",
         "launch_mode": "online",
-        "theme": "dark",
+        "theme": "light",
         "language": "pt-BR",
         "icon_size": 60
     }
