@@ -1,0 +1,111 @@
+# ==========================================
+# STEAM SWAPPER - Git Ignore
+# ==========================================
+
+# ------------------------------------------
+# Python
+# ------------------------------------------
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env/
+.venv*
+
+# ------------------------------------------
+# PyInstaller
+# ------------------------------------------
+
+build/
+dist/
+
+# PyInstaller generated files
+*.spec.bak
+
+# ------------------------------------------
+# Application data
+# ------------------------------------------
+
+# Dados locais das contas
+steam_swapper.json
+
+# Banco/arquivo legado de contas
+steam_contas.txt
+
+# Backups gerados pelo aplicativo
+*.backup
+*.bak
+*.steam_swapper_backup
+
+# Avatares/cache locais gerados pelo aplicativo
+avatars/cache/
+avatars/*/cache/
+
+# ------------------------------------------
+# Environment / Secrets
+# ------------------------------------------
+
+.env
+.env.*
+!.env.example
+
+# ------------------------------------------
+# IDE / Editors
+# ------------------------------------------
+
+.vscode/
+.idea/
+*.code-workspace
+
+# ------------------------------------------
+# Testing / Coverage
+# ------------------------------------------
+
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# ------------------------------------------
+# Logs / Temporary files
+# ------------------------------------------
+
+*.log
+*.tmp
+*.temp
+
+# ------------------------------------------
+# Windows
+# ------------------------------------------
+
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# ------------------------------------------
+# macOS
+# ------------------------------------------
+
+.DS_Store
+
+# ------------------------------------------
+# Linux
+# ------------------------------------------
+
+*~
+
+# ------------------------------------------
+# Miscellaneous
+# ------------------------------------------
+
+*.swp
+*.swo
