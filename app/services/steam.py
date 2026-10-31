@@ -209,6 +209,11 @@ class SteamService:
                 target_sid = sid
                 break
 
+        # If the account is not cached, let Steam handle its own login.
+        # Do not erase MostRecent for every remembered account.
+        if target_sid is None:
+            return vdf
+
         # Preserve the original Steam account configuration before edits.
         self._ensure_backup(vdf)
         changed = False
