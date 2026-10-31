@@ -699,7 +699,6 @@ class MainWindow(QMainWindow):
         self.nav_buttons = []
         for label_key, icon_key, callback, selected in [
             ("nav_accounts", "home", self._show_accounts, True),
-            ("nav_profiles", "profile", lambda: self.set_view("list"), False),
             ("nav_settings", "settings", self._open_settings_menu, False),
             ("nav_about", "about", self._show_about, False),
             ("nav_updates", "update", lambda: self.check_updates(True), False),
