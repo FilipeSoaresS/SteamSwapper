@@ -378,6 +378,20 @@ class SteamService:
         """
         flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
 
+        # Account data must never be changed while the Steam client is active:
+        # Steam may rewrite loginusers.vdf on exit, losing our changes.
+        if self.is_running():
+            raise RuntimeError(
+                "Steam is still running. Close Steam and any active games "
+                "before switching accounts, then try again."
+            )
+        if not Path(steam_exe).is_file():
+            raise RuntimeError("Steam executable was not found.")
+        if not str(login).strip():
+            raise RuntimeError("A Steam login is required.")
+        if mode not in ("offline", "online", "auto"):
+            raise RuntimeError(f"Unsupported Steam launch mode: {mode}")
+
         if mode == "offline":
             # Prepare the selected account in loginusers.vdf and explicitly
             # request Steam's offline startup path. The VDF selects the
@@ -400,10 +414,18 @@ class SteamService:
         # stabilization window so Steam's helpers have fully exited.
         time.sleep(0.75)
 
-        subprocess.Popen(
+        process = subprocess.Popen(
             args,
             cwd=str(steam_exe.parent),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             creationflags=flags,
         )
+        # A launched process is not an authenticated Steam session. Detect
+        # immediate startup failures without pretending that login succeeded.
+        time.sleep(0.5)
+        if process.poll() not in (None, 0):
+            raise RuntimeError(
+                f"Steam exited immediately with code {process.returncode}."
+            )
+        return process
