@@ -1330,6 +1330,16 @@ class MainWindow(QMainWindow):
         if self.selected_id:
             self.remove_by_id(self.selected_id)
 
+    def closeEvent(self, event):
+        # Keep the QThread owner alive until Steam's shutdown/startup finishes.
+        if self._steam_operation is not None and self._steam_operation.isRunning():
+            event.ignore()
+            self.status.setText(
+                "Aguarde a conclusão da operação da Steam antes de fechar."
+            )
+            return
+        super().closeEvent(event)
+
     def _begin_steam_operation(self, executable, action, account=None):
         if self._steam_operation is not None:
             return
