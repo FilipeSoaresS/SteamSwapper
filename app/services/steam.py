@@ -83,28 +83,9 @@ class SteamService:
                 return True
             time.sleep(0.5)
 
-        # Do not forcibly terminate the game overlay: it may belong to a
-        # running game, and killing it can interrupt Steamworks/SteamAPI.
-        # Only force-close the Steam client itself after graceful shutdown
-        # has timed out. Let Steam's helpers exit with their parent process.
-        try:
-            subprocess.run(
-                ["taskkill", "/F", "/IM", "steam.exe"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                creationflags=flags,
-                check=False,
-            )
-        except OSError:
-            pass
-
-        # A successful taskkill invocation does not guarantee that Steam
-        # has fully exited. Wait for the client before changing account data.
-        for _ in range(20):
-            if not self.is_running():
-                time.sleep(1.5)
-                return True
-            time.sleep(0.5)
+        # Never force-kill Steam while games might be running. A forced
+        # termination can invalidate SteamAPI/overlay handles in those games.
+        # Report failure and let the user close games and Steam normally.
         return False
 
     def _loginusers_file(self, steam_exe):
@@ -171,12 +152,7 @@ class SteamService:
                 "and then use Offline mode."
             )
 
-        backup = vdf.with_suffix(vdf.suffix + ".steam_swapper_backup")
-        if not backup.exists():
-            try:
-                shutil.copy2(vdf, backup)
-            except OSError:
-                pass
+        self._ensure_backup(vdf)
 
         changed = False
         for sid, start_line, end_line in reversed(blocks):
@@ -198,8 +174,7 @@ class SteamService:
         if changed:
             self._write_offline_vdf_and_verify(vdf, new_text, target_sid)
         else:
-            # Verify an already-prepared file too.
-            self._write_offline_vdf_and_verify(vdf, new_text, target_sid)
+            self._verify_offline_vdf(vdf, target_sid)
 
         self._set_auto_login_user(login)
         return vdf
@@ -234,6 +209,8 @@ class SteamService:
                 target_sid = sid
                 break
 
+        # Preserve the original Steam account configuration before edits.
+        self._ensure_backup(vdf)
         changed = False
         for sid, start_line, end_line in reversed(blocks):
             block = lines[start_line:end_line + 1]
@@ -309,6 +286,19 @@ class SteamService:
         block_lines.insert(closing, f'{indent}"{key}"\t\t"{value}"\n')
 
     @staticmethod
+    def _ensure_backup(vdf):
+        backup = vdf.with_suffix(vdf.suffix + ".steam_swapper_backup")
+        if backup.exists():
+            return backup
+        try:
+            shutil.copy2(vdf, backup)
+        except OSError as exc:
+            raise RuntimeError(
+                f"Could not back up Steam's account configuration: {exc}"
+            ) from exc
+        return backup
+
+    @staticmethod
     def _write_vdf(vdf, new_text):
         temp = vdf.with_suffix(vdf.suffix + ".tmp")
         try:
@@ -324,19 +314,25 @@ class SteamService:
 
     @staticmethod
     def _write_offline_vdf_and_verify(vdf, new_text, target_sid):
-        """Atomically write loginusers.vdf and verify the target flags."""
-        temp = vdf.with_suffix(vdf.suffix + ".tmp")
+        """Write and verify, restoring the previous file if verification fails."""
+        previous = vdf.read_bytes()
+        SteamService._write_vdf(vdf, new_text)
         try:
-            temp.write_text(new_text, encoding="utf-8")
-            temp.replace(vdf)
-        except OSError as exc:
-            if temp.exists():
-                try:
-                    temp.unlink()
-                except OSError:
-                    pass
-            raise RuntimeError(f"Could not update Steam's offline configuration:\n\n{exc}") from exc
+            SteamService._verify_offline_vdf(vdf, target_sid)
+        except Exception:
+            try:
+                restore = vdf.with_suffix(vdf.suffix + ".restore.tmp")
+                restore.write_bytes(previous)
+                restore.replace(vdf)
+            except OSError as exc:
+                raise RuntimeError(
+                    f"Steam account verification failed and rollback failed: {exc}"
+                ) from exc
+            raise
+        return vdf
 
+    @staticmethod
+    def _verify_offline_vdf(vdf, target_sid):
         try:
             verify = vdf.read_text(encoding="utf-8-sig")
         except OSError as exc:
