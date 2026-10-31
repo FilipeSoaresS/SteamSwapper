@@ -11,7 +11,7 @@ import urllib.request
 import urllib.error
 import webbrowser
 
-from PySide6.QtCore import Qt, QSize, QTimer, Signal, QObject, QPoint, QPointF
+from PySide6.QtCore import Qt, QSize, QTimer, Signal, QObject, QPoint, QPointF, QThread
 from PySide6.QtGui import QColor, QFont, QIcon, QPainter, QPainterPath, QPen, QPixmap, QLinearGradient, QRadialGradient, QRegion, QPolygonF
 from PySide6.QtWidgets import (
     QApplication, QDialog, QFrame, QGridLayout, QHBoxLayout, QLabel, QLineEdit,
@@ -187,6 +187,35 @@ class WorkerSignals(QObject):
     avatar_ready = Signal(str, str)
     update_checked = Signal(object, str, bool)
     update_downloaded = Signal(str, str)
+
+
+class SteamOperation(QThread):
+    """Run blocking Steam shutdown/startup without freezing the Qt UI."""
+    completed = Signal(str, str, str)
+
+    def __init__(self, steam, executable, action, login="", mode="online", steam_id="", parent=None):
+        super().__init__(parent)
+        self.steam = steam
+        self.executable = executable
+        self.action = action
+        self.login = login
+        self.mode = mode
+        self.steam_id = steam_id
+
+    def run(self):
+        try:
+            if not self.steam.close(self.executable):
+                raise RuntimeError(
+                    "Steam did not close normally. Close any running games and "
+                    "exit Steam manually before retrying."
+                )
+            if self.action == "restart":
+                self.steam.restart(self.executable)
+            else:
+                self.steam.launch(self.executable, self.login, self.mode, self.steam_id)
+            self.completed.emit(self.action, self.login, "")
+        except Exception as exc:
+            self.completed.emit(self.action, self.login, str(exc))
 
 
 class GlowBackground(QWidget):
@@ -624,6 +653,7 @@ class MainWindow(QMainWindow):
         self.signals.update_checked.connect(self._on_update_checked)
         self.signals.update_downloaded.connect(self._on_update_downloaded)
         self._update_busy = False
+        self._steam_operation = None
         self._available_release = None
 
         self.setWindowTitle(APP_NAME)
@@ -1300,58 +1330,73 @@ class MainWindow(QMainWindow):
         if self.selected_id:
             self.remove_by_id(self.selected_id)
 
+    def _begin_steam_operation(self, executable, action, account=None):
+        if self._steam_operation is not None:
+            return
+        login = account.login if account else ""
+        steam_id = account.steam_id if account else ""
+        operation = SteamOperation(
+            self.steam, executable, action, login,
+            self.launch_mode, steam_id, parent=self,
+        )
+        self._steam_operation = operation
+        operation.completed.connect(self._steam_operation_completed)
+        operation.finished.connect(operation.deleteLater)
+        self.status.setText(
+            tr(self.language, "closing", login=login) if account
+            else tr(self.language, "steam_restart")
+        )
+        operation.start()
+
+    def _steam_operation_completed(self, action, login, error):
+        self._steam_operation = None
+        if error:
+            title = tr(self.language, "restart_title" if action == "restart" else "error_switch")
+            self.status.setText(tr(self.language, "switch_failed") if action != "restart" else error)
+            StyledMessage(self, title, error, error=True, language=self.language).exec()
+        elif action == "restart":
+            self.status.setText(tr(self.language, "restart_done"))
+        else:
+            self.status.setText(
+                f"Steam iniciando para {login} — aguarde a autenticação"
+            )
+        QTimer.singleShot(2200, self.update_steam_status)
+
     def restart_steam(self):
+        if self._steam_operation is not None:
+            return
         exe = self.steam.find_executable()
         if not exe:
             StyledMessage(self, tr(self.language, "restart_title"), tr(self.language, "steam_not_found"), error=True, language=self.language).exec()
             return
         dialog = StyledMessage(
-            self,
-            tr(self.language, "restart_title"),
-            tr(self.language, "steam_restart"),
-            confirm=True,
-            confirm_key="restart",
-            language=self.language,
+            self, tr(self.language, "restart_title"), tr(self.language, "steam_restart"),
+            confirm=True, confirm_key="restart", language=self.language,
+        )
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            self._begin_steam_operation(exe, "restart")
+
+    def switch_selected(self):
+        if self._steam_operation is not None:
+            return
+        if not self.selected_id:
+            StyledMessage(self, tr(self.language, "switch_title"), tr(self.language, "select_first"), error=True, language=self.language).exec()
+            return
+        account = next((a for a in self.store.accounts() if a.id == self.selected_id), None)
+        if not account:
+            return
+        dialog = StyledMessage(
+            self, tr(self.language, "switch_title"), confirm=True,
+            language=self.language, confirm_key="switch",
+            switch_account=account, switch_mode=self.launch_mode,
         )
         if dialog.exec() != QDialog.DialogCode.Accepted:
             return
-        try:
-            if not self.steam.close(exe):
-                raise RuntimeError("Steam could not be closed completely.")
-            self.steam.restart(exe)
-            self.status.setText(tr(self.language, "restart_done"))
-            QTimer.singleShot(2200, self.update_steam_status)
-        except (OSError, RuntimeError) as exc:
-            StyledMessage(self, tr(self.language, "restart_title"), str(exc), error=True, language=self.language).exec()
-
-    def switch_selected(self):
-        if not self.selected_id:
-            StyledMessage(self,tr(self.language,"switch_title"),tr(self.language,"select_first"),error=True,language=self.language).exec(); return
-        account=next((a for a in self.store.accounts() if a.id==self.selected_id),None)
-        if not account:return
-        dialog=StyledMessage(
-            self,
-            tr(self.language, "switch_title"),
-            confirm=True,
-            language=self.language,
-            confirm_key="switch",
-            switch_account=account,
-            switch_mode=self.launch_mode,
-        )
-        if dialog.exec()!=QDialog.DialogCode.Accepted:return
-        exe=self.steam.find_executable()
+        exe = self.steam.find_executable()
         if not exe:
-            StyledMessage(self,"Steam",tr(self.language,"steam_not_found"),error=True,language=self.language).exec(); return
-        self.status.setText(tr(self.language,"closing",login=account.login)); QApplication.processEvents()
-        try:
-            if not self.steam.close(exe): raise RuntimeError("Steam could not be closed completely.")
-            self.steam.launch(exe,account.login,self.launch_mode,account.steam_id)
-            # Launching steam.exe does not prove that login/authentication succeeded.
-            self.status.setText(f"Steam iniciando para {account.login} — aguarde a autenticação")
-            QTimer.singleShot(2200,self.update_steam_status)
-        except (OSError,RuntimeError) as exc:
-            StyledMessage(self,tr(self.language,"error_switch"),str(exc),error=True,language=self.language).exec()
-            self.status.setText(tr(self.language,"switch_failed"))
+            StyledMessage(self, "Steam", tr(self.language, "steam_not_found"), error=True, language=self.language).exec()
+            return
+        self._begin_steam_operation(exe, "switch", account)
 
     def _update_window_shape(self):
         # The frameless window needs a real native mask so the outermost
