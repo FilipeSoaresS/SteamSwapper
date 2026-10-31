@@ -1046,6 +1046,7 @@ class MainWindow(QMainWindow):
         QFrame#AccountCard {{ background: {card_bg}; border: 1px solid {t["CARD_BORDER"]}; border-radius: 18px; }}
         QToolButton#AccountMenuButton {{ background: {menu_bg}; color: {muted}; border: 1px solid {border}; border-radius: 8px; font-size: 16px; font-weight: 700; }}
         QToolButton#AccountMenuButton:hover {{ color: {text}; border-color: {blue}; }}
+        QToolButton#AccountMenuButton::menu-indicator {{ image: none; width: 0px; height: 0px; }}
         QFrame#Bottom {{ background: transparent; }}
         """)
         if hasattr(self, "brand_title"):
