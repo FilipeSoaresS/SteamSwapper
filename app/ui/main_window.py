@@ -1346,7 +1346,8 @@ class MainWindow(QMainWindow):
         try:
             if not self.steam.close(exe): raise RuntimeError("Steam could not be closed completely.")
             self.steam.launch(exe,account.login,self.launch_mode,account.steam_id)
-            self.status.setText(tr(self.language,"steam_started",login=account.login,mode=self.launch_text()))
+            # Launching steam.exe does not prove that login/authentication succeeded.
+            self.status.setText(f"Steam iniciando para {account.login} — aguarde a autenticação")
             QTimer.singleShot(2200,self.update_steam_status)
         except (OSError,RuntimeError) as exc:
             StyledMessage(self,tr(self.language,"error_switch"),str(exc),error=True,language=self.language).exec()
