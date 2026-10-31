@@ -1351,6 +1351,7 @@ class MainWindow(QMainWindow):
         )
         self._steam_operation = operation
         operation.completed.connect(self._steam_operation_completed)
+        operation.finished.connect(lambda: self._steam_operation_finished(operation))
         operation.finished.connect(operation.deleteLater)
         self.status.setText(
             tr(self.language, "closing", login=login) if account
@@ -1358,8 +1359,11 @@ class MainWindow(QMainWindow):
         )
         operation.start()
 
+    def _steam_operation_finished(self, operation):
+        if self._steam_operation is operation:
+            self._steam_operation = None
+
     def _steam_operation_completed(self, action, login, error):
-        self._steam_operation = None
         if error:
             title = tr(self.language, "restart_title" if action == "restart" else "error_switch")
             self.status.setText(tr(self.language, "switch_failed") if action != "restart" else error)
